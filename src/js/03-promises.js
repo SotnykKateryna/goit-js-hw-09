@@ -6,7 +6,7 @@ const inputStep = document.querySelector('input[name="step"]');
 const inputAmount = document.querySelector('input[name="amount"]');
 const button = document.querySelector('button[type="submit"]');
 
-button.setAttribute('disabled', '');
+// button.setAttribute('disabled', '');
 
 form.addEventListener('input', checkInputValue);
 form.addEventListener('submit', onFormSubmit);
@@ -17,7 +17,7 @@ function checkInputValue() {
     parseInt(inputStep.value) &&
     parseInt(inputAmount.value)
   ) {
-    button.removeAttribute('disabled');
+    // button.removeAttribute('disabled');
   }
 }
 
@@ -28,16 +28,18 @@ function onFormSubmit(e) {
   const step = parseInt(inputStep.value);
   const amount = parseInt(inputAmount.value);
 
-  if (delay <= 0 || step <= 0 || amount <= 0) {
+  if (delay < 0 || step < 0 || amount < 0) {
     Notiflix.Notify.failure('Value can`t be negative or zero');
     return;
   }
 
-  for (let i = 0; i < amount; i++) {
-    createPromise(i, delay);
+  for (let i = 0; i <= amount; i++) {
+    createPromise(i, delay)
+      .then(resolve => Notiflix.Notify.success(resolve))
+      .catch(reject => Notiflix.Notify.failure(reject));
     delay += step;
   }
-
+  
   form.reset();
 }
 
@@ -46,17 +48,9 @@ function createPromise(position, delay) {
     const shouldResolve = Math.random() > 0.3;
     setTimeout(() => {
       if (shouldResolve) {
-        resolve(
-          Notiflix.Notify.success(
-            `✅ Fulfilled promise ${position} in ${delay}ms`
-          )
-        );
+        resolve(`✅ Fulfilled promise ${position} in ${delay}ms`);
       } else {
-        reject(
-          Notiflix.Notify.failure(
-            `❌ Rejected promise ${position} in ${delay}ms`
-          )
-        );
+        reject(`❌ Rejected promise ${position} in ${delay}ms`);
       }
     }, delay);
   });
