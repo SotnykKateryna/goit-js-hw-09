@@ -33,13 +33,13 @@ function onFormSubmit(e) {
     return;
   }
 
-  for (let i = 0; i <= amount; i++) {
+  for (let i = 0; i < amount; i += 1) {
+    delay += step;
     createPromise(i, delay)
       .then(resolve => Notiflix.Notify.success(resolve))
       .catch(reject => Notiflix.Notify.failure(reject));
-    delay += step;
   }
-  
+
   form.reset();
 }
 
